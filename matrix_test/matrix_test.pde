@@ -135,7 +135,16 @@ void draw() {
   m.rotateX(mouseX/-100.0);
   
   for(Vector v : points) {
-    Vector t = m.transform(v);
+    Vector t = new Vector();
+    for(Vector f : front) {
+      if(v == f) {
+        t = m.transform(v);
+        break;
+      }
+      else {
+        t = v;
+      }
+    }
     tpoints.add(t);
   }
   

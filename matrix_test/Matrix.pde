@@ -1,4 +1,4 @@
-class Matrix {
+public class Matrix {
   double[][] in = { {1, 0, 0, 0},
                     {0, 1, 0, 0},
                     {0, 0, 1, 0},
