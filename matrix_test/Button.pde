@@ -1,12 +1,13 @@
-public class Button {
+class Button {
+  //PGraphics button;
   PVector min, max;
   int w, h;
   boolean highlight;
   
   Button(PVector position, int w, int h) {
     min = position;
-    w = this.w;
-    h = this.h;
+    this.w = w;
+    this.h = h;
     max = new PVector(min.x+w, min.y+h);
   }
   
@@ -15,8 +16,9 @@ public class Button {
   }
   
   void draw() {
+    strokeWeight(1);
     rect(min.x, min.y, w, h);
-    if(highlight) tint(100);
+    if(highlight) tint(200);
     else noTint();
   }
 }

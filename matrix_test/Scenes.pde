@@ -3,11 +3,6 @@ class SceneTitle {
   }
 }
 
-class SceneTest {
-  SceneTest() {
-  }
-}
-
 class SceneMatrix {
   SceneMatrix() {
   }
@@ -28,7 +23,7 @@ class SceneScale {
   }
 }
 
-class SceneInteraction {
-  SceneInteraction() {
+class SceneTransformation {
+  SceneTransformation() {
   }
 }
