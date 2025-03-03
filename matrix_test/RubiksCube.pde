@@ -15,7 +15,20 @@ class RubiksCube {
   Vector center = new Vector();
   int x, y, z;
   
+  boolean leftHeld, leftClick, leftRelease;
+  boolean rightHeld, rightClick, rightRelease;
+  boolean middleClick;
+  int startX, startY;
+  float rotX = 0, rotY = 0, rotZ = 0;
+  int rotAxis = 0;
+  boolean braindamage;
+  
+  Button home;
+  Button reset;
+  
   RubiksCube() {
+    home = new Button(new PVector(0, 0), 100, 50, "HOME");
+    reset = new Button(new PVector(width-100, 0), 100, 50, "RESET");
     for (int i = 0; i < 6; i++) {
       if(i%2 == 0) x+= 10;
       else x += 90;
@@ -131,12 +144,57 @@ class RubiksCube {
   }
   
   void update() {
+    leftClick = Mouse.onDown(Mouse.LEFT);
+    leftHeld = Mouse.isDown(Mouse.LEFT);
+    leftRelease = Mouse.onUp(Mouse.LEFT);
+    middleClick = Mouse.onDown(Mouse.CENTER);
+    
+    if(middleClick) {
+      rotAxis += 1;
+      if(rotAxis == 2) rotAxis = 0;
+    }
+    
+    if(leftClick) {
+       startX = mouseX;
+       startY = mouseY;
+    }
+    
     Matrix m = new Matrix();
-    m.rotateX(mouseX/-100.0);
+    switch(rotAxis) {
+      case 0:
+        m.rotateY(-(rotX+(mouseX-startX)/-100.0));
+        //m.rotateX(rotY);
+        //m.rotateZ(rotZ);
+        break;
+      case 1:
+        m.rotateX(rotY+(mouseY-startY)/-100.0);
+        //m.rotateY(rotX);
+        //m.rotateZ(rotZ);
+        break;
+      case 2:
+        m.rotateZ(rotZ+(mouseX-startX)/-100.0);
+        m.rotateX(rotY);
+        m.rotateY(rotX);
+        break;
+    }
+    
+    if(leftRelease) {
+      switch(rotAxis) {
+      case 0:
+        rotX += (mouseX-startX)/-100.0;
+        break;
+      case 1:
+        rotY += (mouseY-startY)/-100.0;
+        break;
+      case 2:
+        rotZ += (mouseX-startX)/-100.0;
+        break;
+    }
+  }
     
     for(Vector v : points) {
       Vector t = new Vector();
-      for(Vector f : front) {
+      for(Vector f : points) {
         if(v == f) {
           t = m.transform(v);
           break;
@@ -148,6 +206,8 @@ class RubiksCube {
       tpoints.add(t);
     }
     
+    home.update();
+    reset.update();
   }
   
   void draw() {
@@ -175,6 +235,20 @@ class RubiksCube {
     //for(Vector v : tpoints) {
     //  v.drawPoint();
     //}
+    
+    if(home.clicked) {
+      scene = 0;
+      braindamage = true;
+    }
+    if(reset.clicked) {
+      reset();
+    }
     tpoints.clear();
+  }
+  
+  void reset() {
+    tpoints = points;
+    rotX = rotY = rotZ = 0;
+    rotAxis = 0;
   }
 }

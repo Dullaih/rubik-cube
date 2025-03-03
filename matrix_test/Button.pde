@@ -2,9 +2,12 @@ class Button {
   //PGraphics button;
   PVector min, max;
   int w, h;
-  boolean highlight;
+  boolean highlight = false;
   String text;
   public boolean clicked;
+  float tWidth, tOffsetX, tOffsetY;
+  Button home;
+  Button reset;
   
   Button(PVector position, int w, int h, String text) {
     min = position;
@@ -12,6 +15,14 @@ class Button {
     this.h = h;
     this.text = text;
     max = new PVector(min.x+w, min.y+h);
+    tWidth = textWidth(text);
+    if(tWidth > w) {
+      tOffsetX = tOffsetY = 5;
+    }
+    else {
+      tOffsetX = (w - tWidth)/2;
+      tOffsetY = h/2 - 5;
+    }
   }
   
   void update() {
@@ -20,16 +31,16 @@ class Button {
   }
   
   void draw() {
+    strokeWeight(1);
     if(highlight) {
-      fill(220);
-      textSize(16);
+      fill(240);
     }
     else {
       fill(200);
-      textSize(12);
     }
     rect(min.x, min.y, w, h);
     fill(0);
-    text(text, min.x+w/2, min.y+h/2);
+    //text(text, min.x+w/2, min.y+h/2);
+    text(text, min.x+tOffsetX, min.y+tOffsetY, max.x-tOffsetX, max.y-tOffsetY);
   }
 }

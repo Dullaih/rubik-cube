@@ -47,4 +47,8 @@ static public class Mouse {
   public static boolean onDown(int code) {
     return (buttons[code] && !pButtons[code]);
   }
+  
+  public static boolean onUp(int code) {
+    return (!buttons[code] && pButtons[code]);
+  }
 }

@@ -1,6 +1,8 @@
 RubiksCube cube;
 SceneTitle sceneTitle;
 SceneMatrix sceneMatrix;
+SceneMult sceneMult;
+SceneIdentity sceneIdentity;
 SceneRotation sceneRotation;
 SceneTranslation sceneTranslation;
 SceneScale sceneScale;
@@ -9,8 +11,7 @@ int scene = 0;
 
 void setup() {
   size(500, 500, P3D);
-  textAlign(CENTER, CENTER);
-  scene = 2;
+  //textAlign(CENTER, CENTER);
   switchScene();
 }
 
@@ -28,28 +29,41 @@ void draw() {
       sceneMatrix.draw();
       break;
     case 2:
+      sceneMult.update();
+      sceneMult.draw();
+      break;
+    case 3:
+      sceneIdentity.update();
+      sceneIdentity.draw();
+      break;
+    case 4:
       sceneRotation.update();
       sceneRotation.draw();
       break;
-    case 3:
+    case 5:
       sceneTranslation.update();
       sceneTranslation.draw();
       break;
-    case 4:
+    case 6:
       sceneScale.update();
       sceneScale.draw();
       break;
-    case 5:
+    case 7:
       sceneTransformation.update();
       sceneTransformation.draw();
       break;
-    case 6:
+    case 8:
       pushMatrix();
       camera(0, 0, 0, -300, 500, -300, 0.0, 1.0, 0.0);
       translate(-300, 500, -300);
       cube.update();
-      cube.draw();
+      if(cube.leftHeld) cube.draw();
       popMatrix();
+      hint(DISABLE_DEPTH_TEST);
+      cube.home.draw();
+      cube.reset.draw();
+      hint(ENABLE_DEPTH_TEST);
+      if(cube.braindamage) switchScene();
       break;
   }
   
@@ -61,64 +75,46 @@ void switchScene() {
     case 0:
       sceneTitle = new SceneTitle();
       sceneMatrix = null;
-      sceneRotation = null;
-      sceneTranslation = null;
-      sceneScale = null;
-      sceneTransformation = null;
       cube = null;
       break;
     case 1:
       sceneTitle = null;
       sceneMatrix = new SceneMatrix();
-      sceneRotation = null;
-      sceneTranslation = null;
-      sceneScale = null;
-      sceneTransformation = null;
-      cube = null;
+      sceneMult = null;
       break;
     case 2:
-      sceneTitle = null;
       sceneMatrix = null;
-      sceneRotation = new SceneRotation();
-      sceneTranslation = null;
-      sceneScale = null;
-      sceneTransformation = null;
-      cube = null;
+      sceneMult = new SceneMult();
+      sceneIdentity = null;
       break;
     case 3:
-      sceneTitle = null;
-      sceneMatrix = null;
+      sceneMult = null;
+      sceneIdentity = new SceneIdentity();
+      sceneRotation = null;
+      break;
+    case 4:
+      sceneIdentity = null;
+      sceneRotation = new SceneRotation();
+      sceneTranslation = null;
+      break;
+    case 5:
       sceneRotation = null;
       sceneTranslation = new SceneTranslation();
       sceneScale = null;
-      sceneTransformation = null;
-      cube = null;
       break;
-    case 4:
-      sceneTitle = null;
-      sceneMatrix = null;
-      sceneRotation = null;
+    case 6:
       sceneTranslation = null;
       sceneScale = new SceneScale();
       sceneTransformation = null;
-      cube = null;
       break;
-    case 5:
-      sceneTitle = null;
-      sceneMatrix = null;
-      sceneRotation = null;
-      sceneTranslation = null;
+    case 7:
       sceneScale = null;
       sceneTransformation = new SceneTransformation();
       cube = null;
       break;
-    case 6:
+    case 8:
       hint(ENABLE_DEPTH_TEST);
       sceneTitle = null;
-      sceneMatrix = null;
-      sceneRotation = null;
-      sceneTranslation = null;
-      sceneScale = null;
       sceneTransformation = null;
       cube = new RubiksCube();
       break;
