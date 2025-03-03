@@ -27,6 +27,7 @@ class RubiksCube {
   Button reset;
   
   RubiksCube() {
+    textSize(20);
     home = new Button(new PVector(0, 0), 100, 50, "HOME");
     reset = new Button(new PVector(width-100, 0), 100, 50, "RESET");
     for (int i = 0; i < 6; i++) {
@@ -50,7 +51,7 @@ class RubiksCube {
     center.mult(0.5);
     
     for(Vector v : points) {
-      println(v);
+      //println(v);
       if (v.x <= 90) {
         front.add(v);
         if (v.x == 0 && v.y % 100 == 0 && v.z % 100 == 0) {
@@ -144,38 +145,40 @@ class RubiksCube {
   }
   
   void update() {
-    leftClick = Mouse.onDown(Mouse.LEFT);
-    leftHeld = Mouse.isDown(Mouse.LEFT);
-    leftRelease = Mouse.onUp(Mouse.LEFT);
-    middleClick = Mouse.onDown(Mouse.CENTER);
     
     if(middleClick) {
       rotAxis += 1;
-      if(rotAxis == 2) rotAxis = 0;
+      if(rotAxis == 3) rotAxis = 0;
     }
     
-    if(leftClick) {
+    if(leftClick || rightClick) {
        startX = mouseX;
        startY = mouseY;
     }
     
     Matrix m = new Matrix();
-    switch(rotAxis) {
-      case 0:
-        m.rotateY(-(rotX+(mouseX-startX)/-100.0));
-        //m.rotateX(rotY);
-        //m.rotateZ(rotZ);
-        break;
-      case 1:
-        m.rotateX(rotY+(mouseY-startY)/-100.0);
-        //m.rotateY(rotX);
-        //m.rotateZ(rotZ);
-        break;
-      case 2:
-        m.rotateZ(rotZ+(mouseX-startX)/-100.0);
-        m.rotateX(rotY);
-        m.rotateY(rotX);
-        break;
+    
+    if(rightHeld) {
+      m.scale(2, 2, 2);
+    }
+    if(leftHeld) {
+      switch(rotAxis) {
+        case 0:
+          m.rotateY(-(rotX+(mouseX-startX)/-100.0));
+          //m.rotateX(rotY);
+          //m.rotateZ(rotZ);
+          break;
+        case 1:
+          m.rotateX(rotY+(mouseY-startY)/-100.0);
+          //m.rotateY(rotX);
+          //m.rotateZ(rotZ);
+          break;
+        case 2:
+          m.rotateZ(rotZ+(mouseY-startY)/-100.0);
+          //m.rotateX(rotY);
+          //m.rotateY(rotX);
+          break;
+      }
     }
     
     if(leftRelease) {
@@ -205,6 +208,14 @@ class RubiksCube {
       }
       tpoints.add(t);
     }
+    
+    leftClick = Mouse.onDown(Mouse.LEFT);
+    leftHeld = Mouse.isDown(Mouse.LEFT);
+    leftRelease = Mouse.onUp(Mouse.LEFT);
+    rightClick = Mouse.onDown(Mouse.RIGHT);
+    rightHeld = Mouse.isDown(Mouse.RIGHT);
+    rightRelease = Mouse.onUp(Mouse.RIGHT);
+    middleClick = Mouse.onDown(Mouse.CENTER);
     
     home.update();
     reset.update();
@@ -240,15 +251,15 @@ class RubiksCube {
       scene = 0;
       braindamage = true;
     }
-    if(reset.clicked) {
-      reset();
-    }
+    //if(reset.clicked) {
+    //  reset();
+    //}
     tpoints.clear();
   }
   
-  void reset() {
-    tpoints = points;
-    rotX = rotY = rotZ = 0;
-    rotAxis = 0;
-  }
+  //void reset() {
+  //  tpoints = points;
+  //  rotX = rotY = rotZ = 0;
+  //  rotAxis = 0;
+  //}
 }

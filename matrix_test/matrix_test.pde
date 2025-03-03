@@ -7,10 +7,13 @@ SceneRotation sceneRotation;
 SceneTranslation sceneTranslation;
 SceneScale sceneScale;
 SceneTransformation sceneTransformation;
+SceneThreeD sceneThreeD;
+
+//PMatrix3D test = new PMatrix3D();
 int scene = 0;
 
 void setup() {
-  size(500, 500, P3D);
+  size(1280, 720, P3D);
   //textAlign(CENTER, CENTER);
   switchScene();
 }
@@ -53,6 +56,11 @@ void draw() {
       sceneTransformation.draw();
       break;
     case 8:
+      //sceneThreeD = new SceneThreeD();
+      sceneThreeD.update();
+      sceneThreeD.draw();
+      break;
+    case 9:
       pushMatrix();
       camera(0, 0, 0, -300, 500, -300, 0.0, 1.0, 0.0);
       translate(-300, 500, -300);
@@ -110,12 +118,18 @@ void switchScene() {
     case 7:
       sceneScale = null;
       sceneTransformation = new SceneTransformation();
-      cube = null;
+      sceneThreeD = null;
       break;
     case 8:
+      sceneTransformation = null;
+      sceneThreeD = new SceneThreeD();
+      cube = null;
+      break;
+      //println("3d instantiate");
+    case 9:
       hint(ENABLE_DEPTH_TEST);
       sceneTitle = null;
-      sceneTransformation = null;
+      sceneThreeD = null;
       cube = new RubiksCube();
       break;
   }
